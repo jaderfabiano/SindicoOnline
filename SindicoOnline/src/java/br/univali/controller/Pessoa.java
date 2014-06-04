@@ -22,7 +22,7 @@ public class Pessoa {
     private String senha;
     private int idPessoa;
     private boolean ehSindico;
-
+    private Endereco endereco;
     /**
      * @return the celular
      */
@@ -175,6 +175,20 @@ public class Pessoa {
      */
     public void setEhSindico(boolean ehSindico) {
         this.ehSindico = ehSindico;
+    }
+
+    /**
+     * @return the endereco
+     */
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    /**
+     * @param endereco the endereco to set
+     */
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
     
     
