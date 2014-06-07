@@ -16,7 +16,9 @@ import org.json.JSONObject;
  */
 public class Morador extends Pessoa {
     private int garagem;
+    private int idApartamento;
     private int idMorador;
+    private String veiculo;
 
     /**
      * @return the garagem
@@ -64,15 +66,44 @@ public class Morador extends Pessoa {
         this.setDataNascimento(dados.get("dataNascimento").toString());
         this.setFoneResidencial(dados.get("foneResidencial").toString());
         this.setUsuario(dados.get("usuario").toString());
+        this.setVeiculo(dados.get("veiculo").toString());
         
         System.out.println("Fim ");    
         ApartamentoDAO apDao = new ApartamentoDAO();
+        //TODO: Remover a inserção do Apartamento
         apDao.insertApartamento(ap);
-        apDao.getIdApartamento(ap);
+        this.setIdApartamento(apDao.getIdApartamento(ap));
+        moradorDao.getMoradorById(16);
         
         moradorDao.insertMorador(this);   
     }
-    
-    
+
+    /**
+     * @return the idApartamento
+     */
+    public int getIdApartamento() {
+        return idApartamento;
+    }
+
+    /**
+     * @param idApartamento the idApartamento to set
+     */
+    public void setIdApartamento(int idApartamento) {
+        this.idApartamento = idApartamento;
+    }
+
+    /**
+     * @return the veiculo
+     */
+    public String getVeiculo() {
+        return veiculo;
+    }
+
+    /**
+     * @param veiculo the veiculo to set
+     */
+    public void setVeiculo(String veiculo) {
+        this.veiculo = veiculo;
+    }
     
 }

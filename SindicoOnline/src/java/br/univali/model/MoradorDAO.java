@@ -8,7 +8,12 @@ package br.univali.model;
 
 import br.univali.controller.Morador;
 import com.mysql.jdbc.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,9 +31,27 @@ public class MoradorDAO {
     
     public boolean insertMorador( Morador morador) {
         this.conex = fact.startConnection();
-        String query = "insert int";
+        String query = "insert into morador (nome, cpf, rg, dataNascimento, foneResidencial, "
+                +"celular, veiculo, garagem, idApartamento ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+        System.out.println("Morador a inserir "+  morador.getNome());
         if ( this.conex != null ){
             System.out.println("Montar sql");
+            try {
+                PreparedStatement st = this.conex.prepareStatement( query );
+                st.setString(1, morador.getNome());
+                st.setString(2, morador.getCpf());
+                st.setInt(3, morador.getRg());
+                st.setString(4, morador.getDataNascimento());
+                st.setString(5, morador.getFoneResidencial());
+                st.setString(6, morador.getCelular());
+                st.setString(7, morador.getVeiculo());
+                st.setInt(8, morador.getGaragem());
+                st.setInt(9, morador.getIdApartamento());
+                st.execute();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(MoradorDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         this.fact.finishConnection(this.conex);
         return true;
@@ -36,6 +59,31 @@ public class MoradorDAO {
     
     public boolean removeMorador ( int moradorId ) {
         return true;
+    }
+    
+    
+    public Morador getMoradorById( int idMorador ) {
+        Morador morador = null;
+        String query = "select * from morador where idMorador = ?";
+        
+        try {
+            PreparedStatement st = this.conex.prepareStatement( query );
+            st.setInt(1, idMorador);
+            
+            ResultSet rs = st.executeQuery();
+            int count = 1;
+            while (rs.next()){
+                
+                System.out.println("vez " + count + " item " + rs.getString("Nome"));
+                count++;
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(MoradorDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return morador;
     }
     
     public ArrayList<Morador> getListMorador() {
