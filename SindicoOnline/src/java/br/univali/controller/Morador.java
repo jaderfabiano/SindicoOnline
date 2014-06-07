@@ -9,7 +9,10 @@ package br.univali.controller;
 import br.univali.model.ApartamentoDAO;
 import br.univali.model.MoradorDAO;
 import br.univali.model.UsuarioDAO;
+import java.util.ArrayList;
+import org.json.JSONArray;
 import org.json.JSONObject;
+import sun.awt.AppContext;
 
 /**
  *
@@ -49,6 +52,34 @@ public class Morador extends Pessoa {
         this.idMorador = idMorador;
     }    
     
+    
+    /**
+     * @return the idApartamento
+     */
+    public int getIdApartamento() {
+        return idApartamento;
+    }
+
+    /**
+     * @param idApartamento the idApartamento to set
+     */
+    public void setIdApartamento(int idApartamento) {
+        this.idApartamento = idApartamento;
+    }
+
+    /**
+     * @return the veiculo
+     */
+    public String getVeiculo() {
+        return veiculo;
+    }
+
+    /**
+     * @param veiculo the veiculo to set
+     */
+    public void setVeiculo(String veiculo) {
+        this.veiculo = veiculo;
+    }
   
     public void novoMorador( String contentRequest ) {
         JSONObject object = new JSONObject(contentRequest);        
@@ -81,33 +112,47 @@ public class Morador extends Pessoa {
         user.insertUsuario(this);        
         moradorDao.insertMorador(this);   
     }
-
-    /**
-     * @return the idApartamento
-     */
-    public int getIdApartamento() {
-        return idApartamento;
-    }
-
-    /**
-     * @param idApartamento the idApartamento to set
-     */
-    public void setIdApartamento(int idApartamento) {
-        this.idApartamento = idApartamento;
-    }
-
-    /**
-     * @return the veiculo
-     */
-    public String getVeiculo() {
-        return veiculo;
-    }
-
-    /**
-     * @param veiculo the veiculo to set
-     */
-    public void setVeiculo(String veiculo) {
-        this.veiculo = veiculo;
+    
+    
+    public String getListMoradores() {
+        String content = "";
+        MoradorDAO moradorDao = new MoradorDAO();
+        ArrayList<Morador> list = null;
+        
+        list = moradorDao.getListMorador();
+        JSONObject obj = mountListMoradores(list);      
+        
+        return obj.toString();
     }
     
+    
+    public JSONObject mountListMoradores( ArrayList<Morador> list){
+        JSONArray jsonArray = new JSONArray();
+        JSONObject obj = new JSONObject();
+        JSONObject objMorador = new JSONObject();
+        Morador morador;
+        Apartamento ap= new Apartamento();
+        for (int i = 0; i < list.size(); i++)   {
+            morador = list.get(i);
+            ap = ap.getApartamentoByMorador(morador.getIdMorador());            
+            obj.put("idMorador", morador.getIdMorador());
+            obj.put("nome",morador.getNome());
+            obj.put("cpf", morador.getCpf());
+            obj.put("celular", morador.getCelular());
+            obj.put("rg", morador.getRg());
+            obj.put("dataNascimento", morador.getDataNascimento());
+            obj.put("foneResidencial", morador.getFoneResidencial());
+            obj.put("veiculo", morador.getVeiculo());
+            obj.put("garagem", morador.getGaragem());
+            obj.put("andar", ap.getFloor());
+            obj.put("numero", ap.getNumber());
+            obj.put("bloco", ap.getBlock());
+            jsonArray.put(obj);
+            
+        }
+        objMorador.put("moradores", jsonArray);
+        
+        return objMorador;
+    }
+
 }

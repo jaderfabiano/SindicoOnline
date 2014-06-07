@@ -45,9 +45,12 @@ public class MoradorResource {
      */
     @GET
     @Produces("application/json")
-    public String getMorador() {        
+    @Path("/all")
+    public String getMoradores() {        
+        Morador morador = new Morador();
+        
         System.out.println("Chegou um Get");
-        return "morador via Id";
+        return "OK_ID";
     }
 
     /**

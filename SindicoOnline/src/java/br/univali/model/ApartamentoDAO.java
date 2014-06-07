@@ -50,6 +50,24 @@ public class ApartamentoDAO {
         return true;      
     }
     
+    public Apartamento getApartamentoByIdMorador( int idMorador ){
+        Apartamento ap = null;
+        this.conex = this.fact.startConnection();
+        String query = "select * from apartamento where idMorador = ?";
+        
+        if ( this.conex != null) {
+            PreparedStatement st;
+            try {
+                st = this.conex.prepareStatement(query);
+                ResultSet rs = st.executeQuery();
+                ap = new Apartamento(rs.getInt("andar"), rs.getInt("numero"), rs.getString("bloco"));
+            } catch (SQLException ex) {
+                Logger.getLogger(ApartamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }         
+        }        
+        this.fact.finishConnection(this.conex);
+        return ap;
+    }
     
     public int getIdApartamento( Apartamento ap ) {
         int id = 0;

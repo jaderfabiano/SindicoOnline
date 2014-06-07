@@ -6,6 +6,8 @@
 
 package br.univali.controller;
 
+import br.univali.model.ApartamentoDAO;
+
 /**
  *
  * @author jader
@@ -16,12 +18,25 @@ public class Apartamento {
     private int number;
     private String block;
     
+    public Apartamento(){
+        
+    }
+    
     public Apartamento(int floorAp, int numberAp, String apBlock) {
         this.block = apBlock;
         this.floor = floorAp;
         this.number = numberAp;
         
         System.out.println("Apartamento " + this.number);
+    }
+    
+    
+    public Apartamento getApartamentoByMorador( int idMorador){
+        Apartamento ap = null;
+        ApartamentoDAO apDao = new ApartamentoDAO();
+        
+        ap = apDao.getApartamentoByIdMorador(idMorador);
+        return ap;
     }
 
     /**

@@ -6,6 +6,7 @@
 
 package br.univali.model;
 
+import br.univali.controller.Apartamento;
 import br.univali.controller.Morador;
 import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
@@ -104,14 +105,43 @@ public class MoradorDAO {
             
         } catch (SQLException ex) {
             Logger.getLogger(MoradorDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
+        }       
         return morador;
     }
     
     public ArrayList<Morador> getListMorador() {
-        ArrayList<Morador> listaMorador = null;
+        ArrayList<Morador> listaMorador = new ArrayList<Morador>();
+        String query = "select * from morador";
+        Morador morador;
+        Apartamento ap = new Apartamento();
+        this.conex = this.fact.startConnection();
+        if (this.conex != null) {
+            try {
+                PreparedStatement st = this.conex.prepareStatement(query);
+                ResultSet rs = st.executeQuery();
+                while(rs.next()){
+                    morador = new Morador();
+                    morador.setIdMorador(rs.getInt("idMorador"));                    
+                    morador.setCelular(rs.getString("celular"));
+                    morador.setNome(rs.getString("nome"));
+                    morador.setCpf(rs.getString("cpf"));
+                    morador.setDataNascimento(rs.getString("dataNascimento"));
+                    morador.setCelular(rs.getString("foneResidencial"));
+                    morador.setVeiculo(rs.getString("veiculo"));
+                    morador.setGaragem(rs.getInt("garagem"));
+
+                    
+                    ap = ap.getApartamentoByMorador(morador.getIdMorador());
+                    morador.setIdApartamento(ap.getIdApartment());
+                    listaMorador.add(morador);                    
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(MoradorDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                       
+            
+        }
+        this.fact.finishConnection(this.conex);
         return listaMorador;
     }  
     
