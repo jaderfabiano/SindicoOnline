@@ -88,24 +88,34 @@ public class MoradorDAO {
     
     
     public Morador getMoradorById( int idMorador ) {
-        Morador morador = null;
+        Morador morador = new Morador();
         String query = "select * from morador where idMorador = ?";
-        
-        try {
-            PreparedStatement st = this.conex.prepareStatement( query );
-            st.setInt(1, idMorador);
-            
-            ResultSet rs = st.executeQuery();
-            int count = 1;
-            while (rs.next()){
-                
-                System.out.println("vez " + count + " item " + rs.getString("Nome"));
-                count++;
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(MoradorDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }       
+        this.conex = this.fact.startConnection();
+        if ( this.conex != null){
+            try {
+                PreparedStatement st = this.conex.prepareStatement( query );
+                st.setInt(1, idMorador);
+
+                ResultSet rs = st.executeQuery();               
+                while (rs.next()) {
+                    System.out.println(" item " + rs.getString("Nome"));   
+                    morador = new Morador();
+                    morador.setIdMorador(rs.getInt("idMorador"));                    
+                    morador.setCelular(rs.getString("celular"));
+                    morador.setNome(rs.getString("nome"));
+                    morador.setCpf(rs.getString("cpf"));
+                    morador.setDataNascimento(rs.getString("dataNascimento"));
+                    morador.setCelular(rs.getString("foneResidencial"));
+                    morador.setVeiculo(rs.getString("veiculo"));
+                    morador.setGaragem(rs.getInt("garagem"));
+                    morador.setIdApartamento(rs.getInt("idApartamento"));
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(MoradorDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }       
+        }
+        this.fact.finishConnection(this.conex);
         return morador;
     }
     
@@ -120,6 +130,7 @@ public class MoradorDAO {
                 PreparedStatement st = this.conex.prepareStatement(query);
                 ResultSet rs = st.executeQuery();
                 while(rs.next()){
+                    System.out.println("Obtendo dados Moradores");
                     morador = new Morador();
                     morador.setIdMorador(rs.getInt("idMorador"));                    
                     morador.setCelular(rs.getString("celular"));
@@ -129,10 +140,11 @@ public class MoradorDAO {
                     morador.setCelular(rs.getString("foneResidencial"));
                     morador.setVeiculo(rs.getString("veiculo"));
                     morador.setGaragem(rs.getInt("garagem"));
+                    morador.setIdApartamento(rs.getInt("idApartamento"));
 
                     
-                    ap = ap.getApartamentoByMorador(morador.getIdMorador());
-                    morador.setIdApartamento(ap.getIdApartment());
+                    ap = ap.getApartamentoById(morador.getIdApartamento());
+                //    morador.setIdApartamento(ap.getIdApartment());
                     listaMorador.add(morador);                    
                 }
             } catch (SQLException ex) {

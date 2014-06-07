@@ -31,12 +31,16 @@ public class Apartamento {
     }
     
     
-    public Apartamento getApartamentoByMorador( int idMorador){
-        Apartamento ap = null;
-        ApartamentoDAO apDao = new ApartamentoDAO();
+   
+    
+    public Apartamento getApartamentoById( int idApartamento){
+        Apartamento ap = new Apartamento();
+        ApartamentoDAO apDao =  new ApartamentoDAO();
         
-        ap = apDao.getApartamentoByIdMorador(idMorador);
+        ap = apDao.getApartamentoById(idApartamento);
+        
         return ap;
+        
     }
 
     /**

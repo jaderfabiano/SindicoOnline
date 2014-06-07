@@ -125,6 +125,25 @@ public class Morador extends Pessoa {
         return obj.toString();
     }
     
+    public JSONObject mountMoradorJson( Morador morador) {
+        JSONObject obj = new JSONObject();
+        Apartamento ap= new Apartamento();
+        ap = ap.getApartamentoById(morador.getIdApartamento());
+        obj.put("idMorador", morador.getIdMorador());
+        obj.put("nome",morador.getNome());
+        obj.put("cpf", morador.getCpf());
+        obj.put("celular", morador.getCelular());
+        obj.put("rg", morador.getRg());
+        obj.put("dataNascimento", morador.getDataNascimento());
+        obj.put("foneResidencial", morador.getFoneResidencial());
+        obj.put("veiculo", morador.getVeiculo());
+        obj.put("garagem", morador.getGaragem());
+        obj.put("andar", ap.getFloor());
+        obj.put("numero", ap.getNumber());
+        obj.put("bloco", ap.getBlock());
+        return obj;        
+    }
+    
     
     public JSONObject mountListMoradores( ArrayList<Morador> list){
         JSONArray jsonArray = new JSONArray();
@@ -132,9 +151,10 @@ public class Morador extends Pessoa {
         JSONObject objMorador = new JSONObject();
         Morador morador;
         Apartamento ap= new Apartamento();
+        System.out.println("Mount list to json");
         for (int i = 0; i < list.size(); i++)   {
             morador = list.get(i);
-            ap = ap.getApartamentoByMorador(morador.getIdMorador());            
+            ap = ap.getApartamentoById(morador.getIdApartamento());            
             obj.put("idMorador", morador.getIdMorador());
             obj.put("nome",morador.getNome());
             obj.put("cpf", morador.getCpf());
@@ -153,6 +173,16 @@ public class Morador extends Pessoa {
         objMorador.put("moradores", jsonArray);
         
         return objMorador;
+    }
+    
+    public String getMorador( int id) {
+        MoradorDAO moradorDao = new MoradorDAO();
+        Morador morador = null;
+        
+        morador = moradorDao.getMoradorById( id );        
+        JSONObject object = mountMoradorJson(morador);
+        
+        return object.toString();
     }
 
 }

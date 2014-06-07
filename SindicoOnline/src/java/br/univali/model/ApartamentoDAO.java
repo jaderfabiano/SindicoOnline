@@ -50,17 +50,20 @@ public class ApartamentoDAO {
         return true;      
     }
     
-    public Apartamento getApartamentoByIdMorador( int idMorador ){
+    public Apartamento getApartamentoById( int idApartamento ){
         Apartamento ap = null;
         this.conex = this.fact.startConnection();
-        String query = "select * from apartamento where idMorador = ?";
+        String query = "select * from apartamento where idApartamento = ?";
         
         if ( this.conex != null) {
             PreparedStatement st;
             try {
                 st = this.conex.prepareStatement(query);
+                st.setInt(1, idApartamento);
                 ResultSet rs = st.executeQuery();
-                ap = new Apartamento(rs.getInt("andar"), rs.getInt("numero"), rs.getString("bloco"));
+                while (rs.next()){
+                    ap = new Apartamento(rs.getInt("andar"), rs.getInt("numero"), rs.getString("bloco"));
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(ApartamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
             }         
@@ -88,8 +91,7 @@ public class ApartamentoDAO {
         }       
         this.fact.finishConnection(this.conex);   
         System.out.println("Id retorno " + id);
-        return id;
-        
+        return id;        
     }
     
 }

@@ -14,6 +14,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -38,7 +39,20 @@ public class MoradorResource {
      */
     public MoradorResource() {
     }
+    
+    @GET
+    @Produces("application/json")    
+   // @Consumes("application/json")
+    @Path("/{id}")
+    public String getMorador(@PathParam("id") int userId ){
+        Morador morador = new Morador();
+        System.out.println("Teste paramentro " + userId     );
+        String result = morador.getMorador(userId);
+        
+        return result;
+    }
 
+    
     /**
      * Retrieves representation of an instance of br.univali.resource.MoradorResource
      * @return an instance of java.lang.String
@@ -48,9 +62,10 @@ public class MoradorResource {
     @Path("/all")
     public String getMoradores() {        
         Morador morador = new Morador();
+        String list = morador.getListMoradores();
         
         System.out.println("Chegou um Get");
-        return "OK_ID";
+        return list;
     }
 
     /**
