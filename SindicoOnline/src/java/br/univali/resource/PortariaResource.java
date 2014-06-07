@@ -6,6 +6,7 @@
 
 package br.univali.resource;
 
+import br.univali.controller.AcessoCondominio;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -39,7 +40,16 @@ public class PortariaResource {
     @GET
     @Produces("application/json")
     public String getListaEntrada() {
-     return "";   
+        AcessoCondominio acesso = new AcessoCondominio();
+        return acesso.getListaEntrada();        
+    }
+    
+    @GET
+    @Produces("application/json")
+    @Path("/saida")
+    public String getListaSaida() {
+        AcessoCondominio acesso = new AcessoCondominio();
+        return acesso.getLisSaida(); 
     }
 
     /**

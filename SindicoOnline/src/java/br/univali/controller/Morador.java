@@ -147,32 +147,17 @@ public class Morador extends Pessoa {
     
     public JSONObject mountListMoradores( ArrayList<Morador> list){
         JSONArray jsonArray = new JSONArray();
-        JSONObject obj = new JSONObject();
-        JSONObject objMorador = new JSONObject();
-        Morador morador;
+        JSONObject obj = new JSONObject();         
+
         Apartamento ap= new Apartamento();
         System.out.println("Mount list to json");
         for (int i = 0; i < list.size(); i++)   {
-            morador = list.get(i);
-            ap = ap.getApartamentoById(morador.getIdApartamento());            
-            obj.put("idMorador", morador.getIdMorador());
-            obj.put("nome",morador.getNome());
-            obj.put("cpf", morador.getCpf());
-            obj.put("celular", morador.getCelular());
-            obj.put("rg", morador.getRg());
-            obj.put("dataNascimento", morador.getDataNascimento());
-            obj.put("foneResidencial", morador.getFoneResidencial());
-            obj.put("veiculo", morador.getVeiculo());
-            obj.put("garagem", morador.getGaragem());
-            obj.put("andar", ap.getFloor());
-            obj.put("numero", ap.getNumber());
-            obj.put("bloco", ap.getBlock());
-            jsonArray.put(obj);
-            
+            JSONObject objMorador = mountMoradorJson(list.get(i));         
+            jsonArray.put(objMorador);            
         }
-        objMorador.put("moradores", jsonArray);
+        obj.put("moradores", jsonArray);
         
-        return objMorador;
+        return obj;
     }
     
     public String getMorador( int id) {

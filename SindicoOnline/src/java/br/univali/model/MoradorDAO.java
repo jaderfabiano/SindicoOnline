@@ -122,8 +122,8 @@ public class MoradorDAO {
     public ArrayList<Morador> getListMorador() {
         ArrayList<Morador> listaMorador = new ArrayList<Morador>();
         String query = "select * from morador";
-        Morador morador;
-        Apartamento ap = new Apartamento();
+        //Morador morador;
+       
         this.conex = this.fact.startConnection();
         if (this.conex != null) {
             try {
@@ -131,7 +131,9 @@ public class MoradorDAO {
                 ResultSet rs = st.executeQuery();
                 while(rs.next()){
                     System.out.println("Obtendo dados Moradores");
-                    morador = new Morador();
+                    Apartamento ap = new Apartamento();
+                    Morador morador = new Morador();
+                    
                     morador.setIdMorador(rs.getInt("idMorador"));                    
                     morador.setCelular(rs.getString("celular"));
                     morador.setNome(rs.getString("nome"));

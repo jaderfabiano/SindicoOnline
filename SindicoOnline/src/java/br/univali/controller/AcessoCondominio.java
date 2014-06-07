@@ -5,6 +5,11 @@
  */
 package br.univali.controller;
 
+import br.univali.model.AcessoCondominioDAO;
+import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 /**
  *
  * @author jader
@@ -19,6 +24,39 @@ public class AcessoCondominio {
     public AcessoCondominio() {
         
     } 
+    
+    public JSONObject getObjectAcesso(AcessoCondominio acesso) {
+        JSONObject obj = new JSONObject();
+        obj.put("idAcesso", acesso.getIdAcesso());
+        obj.put("dataEntrada", acesso.getDataEntrada());
+        obj.put("dataSaida",acesso.getDataSaida());
+        System.out.println("Nome json " + acesso.getNome());
+        obj.put("nome", acesso.getNome());
+        return obj;        
+    }
+    
+    public String buildAnswerInJson( ArrayList<AcessoCondominio> list){
+        JSONArray jArray = new JSONArray();
+        for ( int i =0; i < list.size(); i++) {
+            JSONObject obj = getObjectAcesso(list.get(i));
+            jArray.put(obj);
+        }
+        return jArray.toString();
+    }
+    
+    public String getListaEntrada() {
+        AcessoCondominioDAO acessoDao = new AcessoCondominioDAO();
+        ArrayList<AcessoCondominio> list;
+        list = acessoDao.getListaEntrada();
+        return buildAnswerInJson(list);        
+    }
+    
+    public String getLisSaida() {
+        AcessoCondominioDAO acessoDao = new AcessoCondominioDAO();
+        ArrayList<AcessoCondominio> list;
+        list = acessoDao.getListaSaida();
+        return buildAnswerInJson(list);
+    }
 
     /**
      * @return the nome
