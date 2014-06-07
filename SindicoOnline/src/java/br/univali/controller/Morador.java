@@ -8,6 +8,7 @@ package br.univali.controller;
 
 import br.univali.model.ApartamentoDAO;
 import br.univali.model.MoradorDAO;
+import br.univali.model.UsuarioDAO;
 import org.json.JSONObject;
 
 /**
@@ -70,11 +71,14 @@ public class Morador extends Pessoa {
         
         System.out.println("Fim ");    
         ApartamentoDAO apDao = new ApartamentoDAO();
-        //TODO: Remover a inserção do Apartamento
-        apDao.insertApartamento(ap);
-        this.setIdApartamento(apDao.getIdApartamento(ap));
-        moradorDao.getMoradorById(16);
+        UsuarioDAO user = new UsuarioDAO();
         
+        //TODO: Remover a inserção do Apartamento
+       // apDao.insertApartamento(ap);
+        this.setIdApartamento(apDao.getIdApartamento(ap));
+        this.setIdMorador(moradorDao.getIdMoradorByCpf(this.getCpf()));
+        moradorDao.getMoradorById(16);
+        user.insertUsuario(this);        
         moradorDao.insertMorador(this);   
     }
 

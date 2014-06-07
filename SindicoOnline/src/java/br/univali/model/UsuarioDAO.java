@@ -6,10 +6,14 @@
 
 package br.univali.model;
 
+import br.univali.controller.Login;
 import br.univali.controller.Morador;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,8 +77,34 @@ public class UsuarioDAO {
            } else {               
                System.out.println("Falha inserindo usuario ");
            }
-        return insert;
-        
+           //this.fact.finishConnection(this.conex);
+        return insert;        
     }
+    
+    public ArrayList<Login> getUsers(){
+        ArrayList<Login> list = new ArrayList<Login>();
+        this.conex = this.fact.startConnection();
+        String query = "select * from usuario ";
+        
+        if (this.conex != null) {
+            try {
+                PreparedStatement st = this.conex.prepareStatement(query);
+                ResultSet rs = st.executeQuery();
+                while( rs.next()){
+                    Login obj = new Login();
+                    obj.setSenha(rs.getString("senha"));
+                    obj.setUser(rs.getString("login"));
+                    System.out.println("PEgou Objeto " + obj.getUser());
+                    list.add(obj);
+                }                         
+            } catch (SQLException ex) {
+                Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }            
+        }
+        
+        return list;
+    }
+    
+   
     
 }

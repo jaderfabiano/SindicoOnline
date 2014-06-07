@@ -62,6 +62,30 @@ public class MoradorDAO {
     }
     
     
+    public int getIdMoradorByCpf( String cpf ){
+        int id = 0;
+        String query = "select idMorador from morador where cpf = ?";
+        this.conex = this.fact.startConnection();
+        
+        if ( this.conex != null){
+            try {
+                PreparedStatement st = this.conex.prepareStatement(query);
+                st.setString(1, cpf);
+                ResultSet rs = st.executeQuery();
+                while (rs.next()) {
+                    id = rs.getInt("idMorador");                    
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(MoradorDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        this.fact.finishConnection(this.conex);
+        
+        
+        return id;
+    }
+    
+    
     public Morador getMoradorById( int idMorador ) {
         Morador morador = null;
         String query = "select * from morador where idMorador = ?";
