@@ -7,15 +7,20 @@
 package br.univali.resource;
 
 
+
+import br.univali.controller.Morador;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
+
+
+import org.json.JSONObject;
+
 
 /**
  * REST Web Service
@@ -57,10 +62,12 @@ public class MoradorResource {
     
     @POST
     @Consumes("application/json")
-    public String novoMorador(String track) {
-        
+    public String novoMorador(String content) {
+      Morador morador = new Morador();
+      morador.novoMorador(content);
+   
        
-        System.out.println("Chegou comando post " + track);
+        //System.out.println("Chegou comando post " + content);
         return "OK";
         
     }
