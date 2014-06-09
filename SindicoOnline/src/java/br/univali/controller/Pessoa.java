@@ -16,7 +16,7 @@ public class Pessoa {
     private String dataNascimento;
     private String foneResidencial;
     private String nome;
-    private int rg;
+    private String rg;
     private String sexo;
     private String usuario;
     private String senha;
@@ -93,19 +93,6 @@ public class Pessoa {
         this.nome = nome;
     }
 
-    /**
-     * @return the rg
-     */
-    public int getRg() {
-        return rg;
-    }
-
-    /**
-     * @param rg the rg to set
-     */
-    public void setRg(int rg) {
-        this.rg = rg;
-    }
 
     /**
      * @return the sexo
@@ -189,6 +176,20 @@ public class Pessoa {
      */
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    /**
+     * @return the rg
+     */
+    public String getRg() {
+        return rg;
+    }
+
+    /**
+     * @param rg the rg to set
+     */
+    public void setRg(String rg) {
+        this.rg = rg;
     }
     
     

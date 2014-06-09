@@ -105,6 +105,61 @@ public class UsuarioDAO {
         return list;
     }
     
+    public boolean deleteUser( int idMorador){
+        String query = "delete from usuario where idMorador = ?";
+        this.conex = this.fact.startConnection();
+        if (this.conex != null){
+            try {
+                PreparedStatement st = this.conex.prepareStatement(query);
+                st.setInt(1, idMorador);
+                st.execute();
+            } catch (SQLException ex) {
+                Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        return true;        
+    }
+    
+    public Morador getUserById( int idMorador ) {
+        Morador morador = new Morador();
+        String query = "select * from usuario where idMorador = ?";
+        this.conex = this.fact.startConnection();
+        if (this.conex != null){
+            try {
+                PreparedStatement st = this.conex.prepareStatement(query);
+                st.setInt(1, idMorador);
+                ResultSet rs = st.executeQuery();
+                while (rs.next()){
+                    morador.setUsuario(rs.getString("login"));
+                    morador.setSenha(rs.getString("senha"));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }      
+            
+        }
+        //this.fact.finishConnection(this.conex);
+        return morador;      
+    }
+    
+    public boolean updateUser(Morador morador, int idMorador){
+        String query = "update usuario set usuario = ?, senha = ? where idMorador = ?";
+        this.conex = this.fact.startConnection();
+        if ( this.conex != null ){
+            try {
+                PreparedStatement st = this.conex.prepareStatement(query);
+                st.setString(1, morador.getUsuario());
+                st.setString(2, morador.getSenha());
+                st.setInt(3, idMorador);
+                st.execute();
+            } catch (SQLException ex) {
+                Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           
+        }
+        return true;
+    }
    
     
 }

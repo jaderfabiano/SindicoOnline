@@ -30,6 +30,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(br.univali.resource.ApartamentoResource.class);
         resources.add(br.univali.resource.LoginResource.class);
         resources.add(br.univali.resource.MoradorResource.class);
         resources.add(br.univali.resource.PortariaResource.class);

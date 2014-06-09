@@ -61,6 +61,8 @@ public class PortariaResource {
     @Consumes("application/json")
     @Produces("application/json")
     public String registraSaida(String content) {
-        return "";
+        AcessoCondominio acesso = new AcessoCondominio();
+        acesso.registraSaida(content);
+        return "\"OK\"";
     }
 }

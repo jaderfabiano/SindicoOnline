@@ -19,24 +19,10 @@ import sun.awt.AppContext;
  * @author jader
  */
 public class Morador extends Pessoa {
-    private int garagem;
+    private String garagem;
     private int idApartamento;
     private int idMorador;
     private String veiculo;
-
-    /**
-     * @return the garagem
-     */
-    public int getGaragem() {
-        return garagem;
-    }
-
-    /**
-     * @param garagem the garagem to set
-     */
-    public void setGaragem(int garagem) {
-        this.garagem = garagem;
-    }
 
     /**
      * @return the idMorador
@@ -81,93 +67,134 @@ public class Morador extends Pessoa {
         this.veiculo = veiculo;
     }
   
-    public void novoMorador( String contentRequest ) {
+ 
+
+    /**
+     * @return the garagem
+     */
+    public String getGaragem() {
+        return garagem;
+    }
+
+    /**
+     * @param garagem the garagem to set
+     */
+    public void setGaragem(String garagem) {
+        this.garagem = garagem;
+    }
+    
+    public void deleteMorador(int idMorador) {
+        MoradorDAO moradorDao = new MoradorDAO();        
+        UsuarioDAO userDao = new UsuarioDAO();
+        userDao.deleteUser(idMorador);
+        moradorDao.removeMorador(idMorador);        
+    }
+    
+    public void mountObjectRequest( String contentRequest) {
         JSONObject object = new JSONObject(contentRequest);        
-        JSONObject dados = new JSONObject(object.get("morador").toString());   
-        MoradorDAO moradorDao = new MoradorDAO();
-        Apartamento ap = 
-                new Apartamento(dados.getInt("andar"), dados.getInt("numero"), dados.get("bloco").toString());
-        System.out.println("Nome " + dados.get("nome").toString());
-        this.setGaragem(dados.getInt("garagem"));
+        JSONObject dados = new JSONObject(object.get("morador").toString());
+        this.setGaragem(dados.getString("garagem"));
         this.setNome(dados.get("nome").toString());
         this.setSexo(dados.get("sexo").toString());
         this.setSenha(dados.get("senha").toString());
-        this.setRg(dados.getInt("rg"));
+        this.setRg(dados.getString("rg"));
         this.setCelular(dados.get("celular").toString());
         this.setCpf(dados.get("cpf").toString());
         this.setDataNascimento(dados.get("dataNascimento").toString());
         this.setFoneResidencial(dados.get("foneResidencial").toString());
         this.setUsuario(dados.get("usuario").toString());
         this.setVeiculo(dados.get("veiculo").toString());
-        
-        System.out.println("Fim ");    
-        ApartamentoDAO apDao = new ApartamentoDAO();
-        UsuarioDAO user = new UsuarioDAO();
-        
-        //TODO: Remover a inserção do Apartamento
-       // apDao.insertApartamento(ap);
-        this.setIdApartamento(apDao.getIdApartamento(ap));
-        this.setIdMorador(moradorDao.getIdMoradorByCpf(this.getCpf()));
-        moradorDao.getMoradorById(16);
-        user.insertUsuario(this);        
-        moradorDao.insertMorador(this);   
+        this.setIdApartamento(dados.getInt("idApartamento"));
     }
     
-    
-    public String getListMoradores() {
-        String content = "";
+    public void updateMorador( int idMorador, String contentRequest){
         MoradorDAO moradorDao = new MoradorDAO();
-        ArrayList<Morador> list = null;
-        
-        list = moradorDao.getListMorador();
-        JSONObject obj = mountListMoradores(list);      
-        
-        return obj.toString();
+        UsuarioDAO userDao  = new UsuarioDAO();
+        mountObjectRequest(contentRequest);
+        moradorDao.updateMorador(idMorador, this);        
+        userDao.updateUser(this, idMorador);
     }
     
-    public JSONObject mountMoradorJson( Morador morador) {
-        JSONObject obj = new JSONObject();
-        Apartamento ap= new Apartamento();
-        ap = ap.getApartamentoById(morador.getIdApartamento());
-        obj.put("idMorador", morador.getIdMorador());
-        obj.put("nome",morador.getNome());
-        obj.put("cpf", morador.getCpf());
-        obj.put("celular", morador.getCelular());
-        obj.put("rg", morador.getRg());
-        obj.put("dataNascimento", morador.getDataNascimento());
-        obj.put("foneResidencial", morador.getFoneResidencial());
-        obj.put("veiculo", morador.getVeiculo());
-        obj.put("garagem", morador.getGaragem());
-        obj.put("andar", ap.getFloor());
-        obj.put("numero", ap.getNumber());
-        obj.put("bloco", ap.getBlock());
-        return obj;        
+    public void novoMorador( String contentRequest ) {        
+        MoradorDAO moradorDao = new MoradorDAO();
+     //System.out.println("Nome " + dados.get("nome").toString());
+        mountObjectRequest(contentRequest);
+        System.out.println("Fim ");    
+        UsuarioDAO user = new UsuarioDAO();
+        moradorDao.insertMorador(this);   
+        this.setIdMorador(moradorDao.getIdMoradorByCpf(this.getCpf()));
+        user.insertUsuario(this);       
     }
-    
-    
-    public JSONObject mountListMoradores( ArrayList<Morador> list){
-        JSONArray jsonArray = new JSONArray();
-        JSONObject obj = new JSONObject();         
+   
 
-        Apartamento ap= new Apartamento();
-        System.out.println("Mount list to json");
-        for (int i = 0; i < list.size(); i++)   {
-            JSONObject objMorador = mountMoradorJson(list.get(i));         
-            jsonArray.put(objMorador);            
+
+ public String getListMoradores() {
+     String content = "";
+     MoradorDAO moradorDao = new MoradorDAO();
+     ArrayList<Morador> list = null;
+
+     list = moradorDao.getListMorador();
+     JSONObject obj = mountListMoradores(list);      
+
+     return obj.toString();
+ }
+
+ public JSONObject mountMoradorJson( Morador morador) {
+     JSONObject obj = new JSONObject();
+     Apartamento ap= new Apartamento();
+     ap = ap.getApartamentoById(morador.getIdApartamento());
+     obj.put("idMorador", morador.getIdMorador());
+     obj.put("nome",morador.getNome());
+     obj.put("cpf", morador.getCpf());
+     obj.put("celular", morador.getCelular());
+     obj.put("rg", morador.getRg());
+     obj.put("dataNascimento", morador.getDataNascimento());
+     obj.put("foneResidencial", morador.getFoneResidencial());
+     obj.put("veiculo", morador.getVeiculo());
+     obj.put("garagem", morador.getGaragem());
+     obj.put("sexo", morador.getSexo());
+     obj.put("andar", ap.getFloor());
+     obj.put("numero", ap.getNumber());
+     obj.put("bloco", ap.getBlock());
+     obj.put("idApartamento", morador.getIdApartamento());
+     return obj;        
+ }
+
+
+ public JSONObject mountListMoradores( ArrayList<Morador> list){
+    JSONArray jsonArray = new JSONArray();
+    JSONObject obj = new JSONObject();         
+
+     Apartamento ap= new Apartamento();
+     System.out.println("Mount list to json");
+     for (int i = 0; i < list.size(); i++)   {
+         JSONObject objMorador = mountMoradorJson(list.get(i));         
+         jsonArray.put(objMorador);            
         }
         obj.put("moradores", jsonArray);
-        
-        return obj;
+
+         return obj;
     }
-    
+
     public String getMorador( int id) {
         MoradorDAO moradorDao = new MoradorDAO();
         Morador morador = null;
-        
-        morador = moradorDao.getMoradorById( id );        
+
+         morador = moradorDao.getMoradorById( id );        
         JSONObject object = mountMoradorJson(morador);
-        
+
         return object.toString();
+    }
+    
+    
+    
+    public String getUserSenhaById(int idMorador) {
+        UsuarioDAO userDao = new UsuarioDAO();
+        Morador morador = userDao.getUserById(idMorador);
+        JSONObject obj = new JSONObject();
+        obj.put("usuario", morador.getUsuario());
+        obj.put("senha", morador.getSenha());                
+        return obj.toString();
     }
 
 }

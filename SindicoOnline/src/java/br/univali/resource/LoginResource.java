@@ -59,6 +59,8 @@ public class LoginResource {
     @Consumes("application/json")
     @Produces("application/json")
     public String login(String dados){
+        System.out.println("TEste requisicao");
+        System.out.println(" " + dados + "\n\n\n\n\n");
        JSONObject object = new JSONObject(dados);
         System.out.println("Login Requisicao");
        String user = object.get("login").toString();

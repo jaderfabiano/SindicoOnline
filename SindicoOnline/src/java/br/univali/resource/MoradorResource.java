@@ -41,6 +41,17 @@ public class MoradorResource {
     }
     
     @GET
+    @Produces("application/json")
+    @Path("/remove/{id}")
+    public String removeMorador(@PathParam("id") int userId) {
+        System.out.println("teste id " + userId );
+        Morador morador  = new Morador();
+        morador.deleteMorador(userId);       
+        
+        return "\"OK\"";        
+    }
+    
+    @GET
     @Produces("application/json")    
    // @Consumes("application/json")
     @Path("/{id}")
@@ -51,7 +62,14 @@ public class MoradorResource {
         
         return result;
     }
-
+    
+    @GET
+    @Produces("application/json")    
+    @Path("/user/{id}")
+    public String getUserMorador(@PathParam("id") int userId ){
+        Morador morador = new Morador();
+        return morador.getUserSenhaById(userId);
+    }
     
     /**
      * Retrieves representation of an instance of br.univali.resource.MoradorResource
@@ -62,9 +80,7 @@ public class MoradorResource {
     @Path("/all")
     public String getMoradores() {        
         Morador morador = new Morador();
-        String list = morador.getListMoradores();
-        
-        System.out.println("Chegou um Get");
+        String list = morador.getListMoradores();       
         return list;
     }
 
@@ -82,11 +98,17 @@ public class MoradorResource {
     @Consumes("application/json")
     public String novoMorador(String content) {
       Morador morador = new Morador();
+        System.out.println("Novo morador");
       morador.novoMorador(content);
    
-       
-        //System.out.println("Chegou comando post " + content);
-        return "OK";
-        
+        return "\"OK\"";        
+    }
+    @POST
+    @Consumes("application/json")
+    @Path("/update/{id}")
+    public String updateMorador(@PathParam("id") int userId, String content) {  
+        Morador morador = new Morador();
+        morador.updateMorador(userId, content);
+        return "\"OK\"";        
     }
 }

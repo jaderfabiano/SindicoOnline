@@ -57,6 +57,12 @@ public class AcessoCondominio {
         list = acessoDao.getListaSaida();
         return buildAnswerInJson(list);
     }
+    
+    public void registraSaida( String content) {
+        AcessoCondominioDAO acessoDao = new AcessoCondominioDAO();
+        JSONObject obj = new JSONObject(content);          
+        acessoDao.registraSaida(obj.getInt("id"), obj.getString("dataSaida"));        
+    }
 
     /**
      * @return the nome

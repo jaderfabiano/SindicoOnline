@@ -11,6 +11,7 @@ import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,6 +73,34 @@ public class ApartamentoDAO {
         return ap;
     }
     
+    public ArrayList<Apartamento> getListaApartamento() {
+        ArrayList<Apartamento> list = new ArrayList<>();
+        String query = "select * from apartamento";
+        this.conex = this.fact.startConnection();
+        if(this.conex != null) {           
+            try {
+                PreparedStatement st = this.conex.prepareStatement(query);
+                ResultSet rs = st.executeQuery();
+                while ( rs.next()){
+                    Apartamento ap = new Apartamento();
+                    ap.setBlock(rs.getString("bloco"));
+                    ap.setFloor(rs.getInt("andar"));
+                    ap.setNumber(rs.getInt("numero"));
+                    ap.setIdApartment(rs.getInt("idApartamento"));                    
+                    list.add(ap);           
+                    
+                }           
+            } catch (SQLException ex) {
+                Logger.getLogger(ApartamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+        }
+        
+        
+        return list;
+    }
+    
     public int getIdApartamento( Apartamento ap ) {
         int id = 0;
         String query = 
@@ -92,6 +121,5 @@ public class ApartamentoDAO {
         this.fact.finishConnection(this.conex);   
         System.out.println("Id retorno " + id);
         return id;        
-    }
-    
+    }    
 }

@@ -7,6 +7,9 @@
 package br.univali.controller;
 
 import br.univali.model.ApartamentoDAO;
+import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -19,6 +22,39 @@ public class Apartamento {
     private String block;
     
     public Apartamento(){
+        
+    }
+    
+    public JSONObject getApartamentoToJSon( Apartamento ap ) {
+        JSONObject obj = new JSONObject();
+        obj.put("idApartamento", ap.getIdApartment());
+        obj.put("bloco", ap.getBlock());
+        obj.put("andar", ap.getFloor());
+        obj.put("numero", ap.getNumber());
+        return obj;
+    }
+    
+    public JSONObject mountListApartamentos( ArrayList<Apartamento> list){
+        JSONArray jArray = new JSONArray();
+        JSONObject objAp = new JSONObject();
+        
+        for ( int i = 0; i < list.size(); i++){
+            JSONObject obj = getApartamentoToJSon(list.get(i));
+            jArray.put(obj);
+        }
+        objAp.put("apartamentos", jArray);
+        return objAp;
+    } 
+    
+    public String getListaApartamento(){
+        ApartamentoDAO apDao = new ApartamentoDAO();       
+                
+        ArrayList<Apartamento> listApartamento = null;
+        
+        listApartamento = apDao.getListaApartamento();
+        JSONObject obj = mountListApartamentos(listApartamento);
+      
+        return obj.toString();
         
     }
     

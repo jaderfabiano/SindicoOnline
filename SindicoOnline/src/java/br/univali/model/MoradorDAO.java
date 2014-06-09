@@ -33,7 +33,7 @@ public class MoradorDAO {
     public boolean insertMorador( Morador morador) {
         this.conex = fact.startConnection();
         String query = "insert into morador (nome, cpf, rg, dataNascimento, foneResidencial, "
-                +"celular, veiculo, garagem, idApartamento ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+                +"celular, veiculo, garagem, idApartamento, sexo ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
         System.out.println("Morador a inserir "+  morador.getNome());
         if ( this.conex != null ){
             System.out.println("Montar sql");
@@ -41,13 +41,14 @@ public class MoradorDAO {
                 PreparedStatement st = this.conex.prepareStatement( query );
                 st.setString(1, morador.getNome());
                 st.setString(2, morador.getCpf());
-                st.setInt(3, morador.getRg());
+                st.setString(3, morador.getRg());
                 st.setString(4, morador.getDataNascimento());
                 st.setString(5, morador.getFoneResidencial());
                 st.setString(6, morador.getCelular());
                 st.setString(7, morador.getVeiculo());
-                st.setInt(8, morador.getGaragem());
+                st.setString(8, morador.getGaragem());
                 st.setInt(9, morador.getIdApartamento());
+                st.setString(10, morador.getSexo());
                 st.execute();
                 
             } catch (SQLException ex) {
@@ -58,7 +59,49 @@ public class MoradorDAO {
         return true;
     }
     
+    public boolean updateMorador( int idMorador, Morador morador) {
+        String query = "update morador SET nome = ?, cpf = ?, rg = ?, dataNascimento = ?, foneResidencial = ?, "
+                +"celular = ?, veiculo = ?, garagem = ?, idApartamento = ?, sexo = ? where idMorador = ? ";
+        
+        this.conex = this.fact.startConnection();
+        if (this.conex != null){
+            try {
+                PreparedStatement st = this.conex.prepareStatement(query);
+                st.setString(1, morador.getNome());
+                st.setString(2, morador.getCpf());
+                st.setString(3, morador.getRg());
+                st.setString(4, morador.getDataNascimento());
+                st.setString(5, morador.getFoneResidencial());
+                st.setString(6, morador.getCelular());
+                st.setString(7, morador.getVeiculo());
+                st.setString(8, morador.getGaragem());
+                st.setInt(9, morador.getIdApartamento());
+                st.setString(10, morador.getSexo());
+                st.setInt(11, idMorador);
+                st.execute();                
+            } catch (SQLException ex) {
+                Logger.getLogger(MoradorDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+       
+        return true;        
+    }
+    
     public boolean removeMorador ( int moradorId ) {
+        String query = "delete from morador where idMorador = ?";
+        this.conex = this.fact.startConnection();
+        if (this.conex != null) {
+            try {
+                PreparedStatement st = this.conex.prepareStatement(query);
+                st.setInt(1, moradorId);
+                st.execute();
+            } catch (SQLException ex) {
+                Logger.getLogger(MoradorDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        this.fact.finishConnection(this.conex);
         return true;
     }
     
@@ -105,10 +148,13 @@ public class MoradorDAO {
                     morador.setNome(rs.getString("nome"));
                     morador.setCpf(rs.getString("cpf"));
                     morador.setDataNascimento(rs.getString("dataNascimento"));
-                    morador.setCelular(rs.getString("foneResidencial"));
+                    morador.setFoneResidencial(rs.getString("foneResidencial"));
                     morador.setVeiculo(rs.getString("veiculo"));
-                    morador.setGaragem(rs.getInt("garagem"));
+                    morador.setGaragem(rs.getString("garagem"));
+                    morador.setSexo(rs.getString("sexo"));
+                    System.out.println("Sexo " + morador.getSexo());
                     morador.setIdApartamento(rs.getInt("idApartamento"));
+                    morador.setRg(rs.getString("rg"));
                 }
 
             } catch (SQLException ex) {
@@ -139,10 +185,12 @@ public class MoradorDAO {
                     morador.setNome(rs.getString("nome"));
                     morador.setCpf(rs.getString("cpf"));
                     morador.setDataNascimento(rs.getString("dataNascimento"));
-                    morador.setCelular(rs.getString("foneResidencial"));
+                    morador.setFoneResidencial(rs.getString("foneResidencial"));
                     morador.setVeiculo(rs.getString("veiculo"));
-                    morador.setGaragem(rs.getInt("garagem"));
+                    morador.setGaragem(rs.getString("garagem"));
+                    morador.setSexo(rs.getString("sexo"));
                     morador.setIdApartamento(rs.getInt("idApartamento"));
+                    morador.setRg(rs.getString("rg"));
 
                     
                     ap = ap.getApartamentoById(morador.getIdApartamento());
