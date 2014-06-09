@@ -14,7 +14,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import org.json.JSONObject;
 
 /**
  * REST Web Service
@@ -49,7 +51,7 @@ public class PortariaResource {
     @Path("/saida")
     public String getListaSaida() {
         AcessoCondominio acesso = new AcessoCondominio();
-        return acesso.getLisSaida(); 
+        return acesso.getListaSaida(); 
     }
 
     /**
@@ -60,9 +62,10 @@ public class PortariaResource {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public String registraSaida(String content) {
-        AcessoCondominio acesso = new AcessoCondominio();
-        acesso.registraSaida(content);
+    @Path("/{id}")
+    public String registraSaida(@PathParam("id") int id, String content) {
+        AcessoCondominio acesso = new AcessoCondominio();                
+        acesso.registraSaida(id, content);
         return "\"OK\"";
     }
 }

@@ -51,17 +51,17 @@ public class AcessoCondominio {
         return buildAnswerInJson(list);        
     }
     
-    public String getLisSaida() {
+    public String getListaSaida() {
         AcessoCondominioDAO acessoDao = new AcessoCondominioDAO();
         ArrayList<AcessoCondominio> list;
         list = acessoDao.getListaSaida();
         return buildAnswerInJson(list);
     }
     
-    public void registraSaida( String content) {
+    public void registraSaida( int id, String content) {
         AcessoCondominioDAO acessoDao = new AcessoCondominioDAO();
         JSONObject obj = new JSONObject(content);          
-        acessoDao.registraSaida(obj.getInt("id"), obj.getString("dataSaida"));        
+        acessoDao.registraSaida(id, obj.getString("dataSaida"));        
     }
 
     /**
