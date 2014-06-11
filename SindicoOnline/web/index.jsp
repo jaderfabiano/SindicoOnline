@@ -9,9 +9,10 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <META http-equiv="refresh" content="1;URL=http://127.0.0.1/SindicoOnline"> 
+<!--        <title>JSP Page</title>-->
     </head>
-    <body>
+<!--    <body>
         <h1>Hello World!</h1>
-    </body>
+    </body>-->
 </html>

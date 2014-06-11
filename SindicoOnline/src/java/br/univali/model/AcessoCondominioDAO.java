@@ -31,13 +31,14 @@ public class AcessoCondominioDAO {
     public ArrayList<AcessoCondominio> getListaSaida() {
         ArrayList<AcessoCondominio> listAcesso = new ArrayList<>();
         String query = "select * from portaria where not isnull(dataSaida)";
-        AcessoCondominio acesso = new AcessoCondominio();
+        
         this.conex = this.fact.startConnection();
         if (this.conex != null){
             try {
                 PreparedStatement st = this.conex.prepareStatement(query);
                 ResultSet rs = st.executeQuery();
                 while(rs.next()){
+                    AcessoCondominio acesso = new AcessoCondominio();
                     System.out.println("Pegando lista de entrada");
                     acesso.setDataEntrada(rs.getString("dataEntrada"));
                     acesso.setIdAcesso(rs.getInt("idacessoCondominio"));
@@ -81,13 +82,15 @@ public class AcessoCondominioDAO {
     
     
     public boolean registraSaida( int idAcesso, String dataSaida ) {
-        String query = "update portaria set dataSaida = ? where idacessoCondomino = ?";
+        String query = "update portaria set dataSaida = ? where idacessoCondominio = ?";
         this.conex = this.fact.startConnection();
         
         if ( this.conex != null){
             PreparedStatement st;
             try {
                 st = this.conex.prepareStatement(query);
+                st.setString(1, dataSaida);
+                st.setInt(2, idAcesso);
                 st.execute();
             } catch (SQLException ex) {
                 Logger.getLogger(AcessoCondominioDAO.class.getName()).log(Level.SEVERE, null, ex);

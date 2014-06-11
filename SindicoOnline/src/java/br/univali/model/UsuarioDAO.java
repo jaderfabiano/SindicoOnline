@@ -144,8 +144,9 @@ public class UsuarioDAO {
     }
     
     public boolean updateUser(Morador morador, int idMorador){
-        String query = "update usuario set usuario = ?, senha = ? where idMorador = ?";
+        String query = "update usuario set login = ?, senha = ? where idMorador = ?";
         this.conex = this.fact.startConnection();
+        System.out.println("Senha morador " + morador.getSenha());
         if ( this.conex != null ){
             try {
                 PreparedStatement st = this.conex.prepareStatement(query);
